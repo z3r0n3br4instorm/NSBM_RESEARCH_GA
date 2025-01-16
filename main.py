@@ -24,4 +24,4 @@ if __name__ == "__main__":
             prompt = f"""$$DATA_FROM_RAG_ENGINE:\n{ragContext}
                         \nDATA_FROM_RAG_ENGINE_END$$\n{prompt}
                     """
-        print(f"{gamodel.runChat(prompt)}")
+        print(f"{gamodel.run_chat(prompt)}")
