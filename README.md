@@ -10,7 +10,7 @@ For Linux :
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-An NVIDIA CUDA or AMD ROCm Capable GPU with >4GB VRAM is recommended for optimal performance.
+An NVIDIA CUDA or AMD ROCm Capable GPU with <4GB VRAM is recommended for optimal performance.
 For NVIDIA Cards, Download CUDA toolkit from here 
 https://developer.nvidia.com/cuda-toolkit
 
