@@ -2,7 +2,7 @@ import sqlite3
 
 
 def create_tables():
-    conn = sqlite3.connect("GADB.db")
+    conn = sqlite3.connect("systemFiles/GADB.db")
     cursor = conn.cursor()
 
     # List of table names
@@ -147,7 +147,7 @@ def insert_data():
         ],
     }
 
-    conn = sqlite3.connect("GADB.db")
+    conn = sqlite3.connect("systemFiles/GADB.db")
     cursor = conn.cursor()
 
     # Insert data into respective tables
@@ -167,7 +167,7 @@ def insert_data():
 
 
 def query_data():
-    conn = sqlite3.connect("GADB.db")
+    conn = sqlite3.connect("systemFiles/GADB.db")
     cursor = conn.cursor()
 
     # List of table names
