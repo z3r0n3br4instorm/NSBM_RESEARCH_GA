@@ -17,6 +17,7 @@ if __name__ == "__main__":
     gamodel = ModelComm()
     print(f"- Demo Interface {version}-")
     while True:
+        print("\n")
         prompt = input(">")
         rag.runPrompt(prompt)
         ragContext = rag.ragResearchOn("systemFiles/GADB.db")
@@ -24,4 +25,4 @@ if __name__ == "__main__":
             prompt = f"""$$DATA_FROM_RAG_ENGINE:\n{ragContext}
                         \nDATA_FROM_RAG_ENGINE_END$$\n{prompt}
                     """
-        print(f"{gamodel.run_chat(prompt)}")
+        gamodel.run_chat(prompt)
