@@ -1,9 +1,8 @@
-# Prototype
+# Prototype Program For GA Core
 
 import sqlite3
 import spacy
 from ollama import chat
-
 
 class ModelComm:
     def __init__(self):
@@ -91,7 +90,7 @@ class RAG_Engine:
         else:
             return None
 
-# class webScraperEngine:
+# class WebScraperEngine:
 
 if __name__ == "__main__":
     topics = [
