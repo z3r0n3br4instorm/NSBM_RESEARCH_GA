@@ -4,6 +4,10 @@ import sqlite3
 import spacy
 from ollama import chat
 
+global version
+version = "0.0.1"
+
+
 class ModelComm:
     def __init__(self):
         self.model = "llama3.2"
@@ -65,9 +69,10 @@ class RAG_Engine:
 
     def ragResearchOn(self, sourceDB):
         if self.RagEngine:
-            print(f"Research Running on topics: {self.matching_topics}")
+            print(f"Research Engine is Running on topics: {self.matching_topics}")
             conn = sqlite3.connect(sourceDB)
             cursor = conn.cursor()
+            results = []
 
             for topic in self.matching_topics:
                 try:
@@ -76,19 +81,25 @@ class RAG_Engine:
                     rows = cursor.fetchall()
 
                     if rows:
-                        print(f"\nData from {topic}:")
                         for row in rows:
-                            return (
+                            results.append(
                                 f"ID: {row[0]}, Contexts: {row[1]}, About: {row[2]}, Overall: {row[3]}"
                             )
                     else:
-                        return (f"No data found for topic: {topic}")
+                        results.append(f"No data found for topic: {topic}")
                 except sqlite3.OperationalError:
-                    return (f"Table for topic '{topic}' does not exist in the database.")
+                    results.append(
+                        f"Table for topic '{topic}' does not exist in the database."
+                    )
 
             conn.close()
+            if results:
+                return results
+            else:
+                return ["No research data found."]
         else:
             return None
+
 
 # class WebScraperEngine:
 
@@ -102,7 +113,7 @@ if __name__ == "__main__":
     ]
     rag = RAG_Engine(topics)
     gamodel = ModelComm()
-    print("- Interface -")
+    print(f"- Demo Interface {version}-")
     while True:
         prompt = input(">")
         rag.runPrompt(prompt)
@@ -111,4 +122,4 @@ if __name__ == "__main__":
             prompt = f"""$$DATA_FROM_RAG_ENGINE:\n{ragContext}
                         \nDATA_FROM_RAG_ENGINE_END$$\n{prompt}
                     """
-        print(gamodel.runChat(prompt))
+        print(f"{gamodel.runChat(prompt)}")
