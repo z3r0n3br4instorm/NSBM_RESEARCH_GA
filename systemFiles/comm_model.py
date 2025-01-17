@@ -15,7 +15,7 @@ class ModelComm:
     def run_chat(self, message_input):
         if self.execute_command(message_input):
             return self.execute_command(message_input)
-        
+
         self.add_to_context("user", message_input)
         messages = [{"role": "system", "content": "You are a helpful assistant"}] + self.session_context
         self.speak = False

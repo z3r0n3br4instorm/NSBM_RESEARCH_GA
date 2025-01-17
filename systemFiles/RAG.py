@@ -1,5 +1,7 @@
 import spacy
 import sqlite3
+import requests
+from bs4 import BeautifulSoup
 
 
 class RAG_Engine:
@@ -66,3 +68,47 @@ class RAG_Engine:
                 return ["No research data found."]
         else:
             return None
+
+
+class WebRag_Engine:
+    def __init__(self):
+        self.researchWebsites = [
+            "https://www.wikipedia.org",
+            "https://www.bbc.co.uk",
+            "https://www.nsbm.ac.lk",
+            "https://www.google.com",
+            "https://www.youtube.com",
+        ]
+
+    def retrieveData(self, query):
+        # Normalize the query for basic text matching
+        query_terms = [term.lower() for term in query.split()]
+        results = []
+
+        for website in self.researchWebsites:
+            try:
+                response = requests.get(website, timeout=5)
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    paragraphs = soup.find_all("p")  # Extract all paragraphs
+
+                    for paragraph in paragraphs:
+                        paragraph_text = paragraph.get_text().strip().lower()
+                        if any(term in paragraph_text for term in query_terms):
+                            results.append(
+                                f"Relevant text found on {website}:\n{paragraph.get_text().strip()}\n"
+                            )
+                else:
+                    results.append(f"Could not access {website}.")
+            except requests.RequestException as e:
+                results.append(f"Error accessing {website}: {e}")
+
+        return results if results else ["No relevant data found."]
+
+if __name__ == "__main__":
+    topics = ["Artificial Intelligence", "Machine Learning", "Natural Language Processing"]
+    query = "What is the impact of artificial intelligence on modern businesses?"
+
+    web_rag = WebRagEngine(topics)
+    for result in web_rag.retrieveData(query):
+        print(result)
