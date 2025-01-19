@@ -1,8 +1,16 @@
+from langchain_core.messages.base import message_to_dict
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain_community.llms.ollama import Ollama
 from queue import Queue
 from threading import Thread
+from datetime import datetime
+from typing_extensions import Set
+
+class log:
+    def info(self, message):
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[LOGGER][TD:{current_time}] {message}")
 
 class StreamingHandler(BaseCallbackHandler):
     def __init__(self, queue: Queue) -> None:
@@ -11,12 +19,17 @@ class StreamingHandler(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         self.queue.put(token)
 
-    def on_llm_end(self, **kwargs) -> None:
+    def on_llm_end(self, *args, **kwargs) -> None:
         self.queue.put(None)
 
 class ModelComm:
     def __init__(self):
-        self.model = Ollama(model="llama3.2")
+        self.token_queue = Queue()
+        handler = StreamingHandler(self.token_queue)
+        try:
+            self.model = Ollama(model="lama3.2", callbacks=[handler])
+        except:
+            self.log.info("Error: Could not initialize Ollama model.")
         self.session_context = []
 
     def add_to_context(self, role, content):
@@ -36,17 +49,23 @@ class ModelComm:
         print("\nStreaming complete.")
 
     def run_chat(self, message_input):
+        # self.execute_command(message_input)
+        if message_input.lower() == "clear":
+            self.clear_context()
+            print("Session context cleared.")
+            return "clr_cntxt"
         self.add_to_context("user", message_input)
 
         template = "\n".join([f"{entry['role']}: {entry['content']}" for entry in self.session_context])
-
-        token_queue = Queue()
-        handler = StreamingHandler(token_queue)
-        self.model = Ollama(model="tinyllama", callbacks=[handler])
         self.prompt = ChatPromptTemplate.from_template(template)
-        self.chain = self.prompt | self.model
 
-        stream_thread = Thread(target=self.process_tokens, args=(token_queue,))
+        try:
+            self.chain = self.prompt | self.model
+        except:
+            self.log.info("Error: Could not initialize chain.")
+            return "chain_error"
+
+        stream_thread = Thread(target=self.process_tokens, args=(self.token_queue,))
         stream_thread.start()
 
         stream = self.chain.invoke({"question": message_input})
@@ -58,9 +77,3 @@ class ModelComm:
         stream_thread.join()
 
         return response_content
-
-    def execute_command(self, command):
-        if command.lower() == "clear":
-            self.clear_context()
-            print("Session context cleared.")
-            return "Session context cleared."
