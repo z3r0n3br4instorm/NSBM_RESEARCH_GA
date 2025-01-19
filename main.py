@@ -3,7 +3,7 @@ from systemFiles.comm_model import ModelComm
 from systemFiles.RAG import RAG_Engine
 from systemFiles.RAG import WebRag_Engine
 global version
-version = "0.1.1 [refined]"
+version = "0.1.1[refined]"
 updates = "Memory management is now done by langchain"
 
 # Example Usage
