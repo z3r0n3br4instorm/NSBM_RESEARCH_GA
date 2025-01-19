@@ -1,3 +1,6 @@
 spacy==3.7.2
 sqlite3  # Part of Python's standard library, no need to install
 ollama>=1.0.0
+langchain-core
+langchain-community
+langgraph
