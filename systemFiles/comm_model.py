@@ -8,7 +8,6 @@ from datetime import datetime
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 
-
 class Log:
     def info(self, message: str) -> None:
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
