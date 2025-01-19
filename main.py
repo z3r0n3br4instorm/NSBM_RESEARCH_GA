@@ -3,7 +3,8 @@ from systemFiles.comm_model import ModelComm
 from systemFiles.RAG import RAG_Engine
 from systemFiles.RAG import WebRag_Engine
 global version
-version = "0.0.2"
+version = "0.1.1 [refined]"
+updates = "Memory management is now done by langchain"
 
 # Example Usage
 if __name__ == "__main__":
@@ -16,10 +17,12 @@ if __name__ == "__main__":
     ]
     rag = RAG_Engine(topics)
     gamodel = ModelComm()
-    print(f"- Demo Interface {version}-")
+    print(f"- Debug Interface {version}-")
+    print(f"Updates: {updates}")
     while True:
         print("\n")
         prompt = input(">")
+        print("System is processing your request...")
         if "/search" == prompt.lower().split(" ")[0]:
             print("Web Search Engine Initiated.")
             ragContext = WebRag_Engine().retrieveData(prompt)
