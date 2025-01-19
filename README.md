@@ -53,4 +53,4 @@ topics = [
     ]
 ```
 To clear session's context, type `clear` and press enter.
-To do a websearch with RAG, type /search <your search query>
+To do a websearch with RAG, type `/search <your search query>`
