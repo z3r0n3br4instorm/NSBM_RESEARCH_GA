@@ -5,7 +5,7 @@ from systemFiles.RAG_NEW import RAG_Engine
 from systemFiles.RAG_NEW import WebRag_Engine
 global version
 version = "0.1.1[refined]"
-updates = "Memory management is now done by langchain"
+updates = "langchain RAG"
 
 # Example Usage
 if __name__ == "__main__":
