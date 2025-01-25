@@ -15,13 +15,13 @@ class Log:
 
 
 class ModelComm:
-    def __init__(self):
+    def __init__(self, targetModel):
         self.token_queue = Queue()
         self.log = Log()
 
         # Initialize the model
         try:
-            self.model = Ollama(model="llama3.2")
+            self.model = Ollama(model=targetModel)
         except Exception as e:
             self.log.info(f"Error initializing Ollama model: {e}")
 
@@ -30,7 +30,6 @@ class ModelComm:
         self.setup_workflow()
 
     def setup_workflow(self):
-        """LangGraph workflow for memory management."""
         self.workflow = StateGraph(state_schema=MessagesState)
 
         def call_model(state: MessagesState):
@@ -80,7 +79,7 @@ class ModelComm:
         # stream_thread.start()
 
         assistant_response = response["messages"][-1]
-        print(f"Assistant: {assistant_response.content}")
+        print(f"{assistant_response.content}")
         # stream_thread.join()
 
         return assistant_response.content
